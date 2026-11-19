@@ -48,4 +48,10 @@ public class Producto : BaseEntity
 
     [ForeignKey(nameof(IdCategoria))]
     public Categoria Categoria { get; set; } = null!;
+
+    public ICollection<CompraDetalle> CompraDetalles { get; set; } =
+        new List<CompraDetalle>();
+
+    public ICollection<MovimientoInventario> MovimientosInventario
+        { get; set; } = new List<MovimientoInventario>();
 }

@@ -35,4 +35,10 @@ public class Usuario : BaseEntity
 
     [ForeignKey(nameof(IdRol))]
     public Rol Rol { get; set; } = null!;
+
+    public ICollection<Compra> Compras { get; set; } =
+        new List<Compra>();
+
+    public ICollection<MovimientoInventario> MovimientosInventario
+        { get; set; } = new List<MovimientoInventario>();
 }

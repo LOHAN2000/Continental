@@ -34,4 +34,7 @@ public class Proveedor : BaseEntity
 
     [Column("activo")]
     public bool Activo { get; set; } = true;
+
+    public ICollection<Compra> Compras { get; set; } =
+        new List<Compra>();
 }

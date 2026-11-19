@@ -21,6 +21,12 @@ public class ContinentalContext : DbContext
 
     public DbSet<Proveedor> Proveedores => Set<Proveedor>();
 
+    public DbSet<Compra> Compras => Set<Compra>();
+
+    public DbSet<CompraDetalle> CompraDetalles => Set<CompraDetalle>();
+
+    public DbSet<MovimientoInventario> MovimientosInventario => Set<MovimientoInventario>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -32,6 +38,9 @@ public class ContinentalContext : DbContext
         ConfigureCategoria(modelBuilder);
         ConfigureProducto(modelBuilder);
         ConfigureProveedor(modelBuilder);
+        ConfigureCompra(modelBuilder);
+        ConfigureCompraDetalle(modelBuilder);
+        ConfigureMovimientoInventario(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -158,6 +167,116 @@ public class ContinentalContext : DbContext
             entity.Property(proveedor =>
                     proveedor.UpdatedAt)
                 .HasColumnName("actualizado_en");
+        });
+    }
+
+    private static void ConfigureCompra(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Compra>(entity =>
+        {
+            entity.Property(compra => compra.Total)
+                .HasPrecision(12, 2);
+
+            entity.Property(compra => compra.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(compra => compra.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(compra => compra.Proveedor)
+                .WithMany(proveedor => proveedor.Compras)
+                .HasForeignKey(compra => compra.IdProveedor)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(compra => compra.Usuario)
+                .WithMany(usuario => usuario.Compras)
+                .HasForeignKey(compra => compra.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(compra => compra.Fecha);
+        });
+    }
+
+    private static void ConfigureCompraDetalle(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<CompraDetalle>(entity =>
+        {
+            entity.Property(detalle => detalle.Cantidad)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle => detalle.CostoUnitario)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle => detalle.Subtotal)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle => detalle.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(detalle => detalle.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(detalle => detalle.Compra)
+                .WithMany(compra => compra.Detalles)
+                .HasForeignKey(detalle => detalle.IdCompra)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(detalle => detalle.Producto)
+                .WithMany(producto =>
+                    producto.CompraDetalles)
+                .HasForeignKey(detalle =>
+                    detalle.IdProducto)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
+
+    private static void ConfigureMovimientoInventario(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<MovimientoInventario>(entity =>
+        {
+            entity.Property(movimiento => movimiento.Entrada)
+                .HasPrecision(12, 2);
+
+            entity.Property(movimiento => movimiento.Salida)
+                .HasPrecision(12, 2);
+
+            entity.Property(movimiento => movimiento.Saldo)
+                .HasPrecision(12, 2);
+
+            entity.Property(movimiento => movimiento.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(movimiento => movimiento.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(movimiento => movimiento.Producto)
+                .WithMany(producto =>
+                    producto.MovimientosInventario)
+                .HasForeignKey(movimiento =>
+                    movimiento.IdProducto)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(movimiento => movimiento.Usuario)
+                .WithMany(usuario =>
+                    usuario.MovimientosInventario)
+                .HasForeignKey(movimiento =>
+                    movimiento.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(movimiento => new
+            {
+                movimiento.IdProducto,
+                movimiento.Fecha
+            });
         });
     }
 
