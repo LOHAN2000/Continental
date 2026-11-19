@@ -1,0 +1,103 @@
+using Continental.Api.Models.DataModels;
+using Microsoft.EntityFrameworkCore;
+
+namespace Continental.Api.DataAccess;
+
+public class ContinentalContext : DbContext
+{
+    public ContinentalContext(
+        DbContextOptions<ContinentalContext> options
+    ) : base(options)
+    {
+    }
+
+    public DbSet<Rol> Roles => Set<Rol>();
+
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
+
+    protected override void OnModelCreating(
+        ModelBuilder modelBuilder
+    )
+    {
+        base.OnModelCreating(modelBuilder);
+
+        ConfigureRol(modelBuilder);
+        ConfigureUsuario(modelBuilder);
+    }
+
+    private static void ConfigureRol(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Rol>(entity =>
+        {
+            entity.HasIndex(rol => rol.Nombre)
+                .IsUnique();
+
+            entity.Property(rol => rol.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(rol => rol.UpdatedAt)
+                .HasColumnName("actualizado_en");
+        });
+    }
+
+    private static void ConfigureUsuario(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Usuario>(entity =>
+        {
+            entity.HasIndex(usuario => usuario.Correo)
+                .IsUnique();
+
+            entity.Property(usuario => usuario.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(usuario => usuario.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(usuario => usuario.Rol)
+                .WithMany(rol => rol.Usuarios)
+                .HasForeignKey(usuario => usuario.IdRol)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateAuditFields();
+
+        return base.SaveChanges();
+    }
+
+    public override Task<int> SaveChangesAsync(
+        CancellationToken cancellationToken = default
+    )
+    {
+        UpdateAuditFields();
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateAuditFields()
+    {
+        var entries = ChangeTracker
+            .Entries<BaseEntity>();
+
+        foreach (var entry in entries)
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedAt = DateTime.UtcNow;
+            }
+
+            if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedAt = DateTime.UtcNow;
+            }
+        }
+    }
+}

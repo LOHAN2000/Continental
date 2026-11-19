@@ -1,0 +1,65 @@
+# Configuración local con secretos
+**/appsettings.Development.json
+**/appsettings.Local.json
+.env
+.env.*
+!.env.example
+
+# Build outputs
+bin/
+obj/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+# Visual Studio
+.vs/
+**/.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# .NET
+**/bin/
+**/obj/
+artifacts/
+
+# Configuración local con secretos
+**/appsettings.Development.json
+**/appsettings.Local.json
+.env
+.env.*
+!.env.example
+
+# Visual Studio Code
+.vscode/
+**/.vscode/
+
+# Node.js y Next.js
+**/node_modules/
+**/.next/
+**/out/
+**/dist/
+
+# Android
+**/.gradle/
+**/local.properties
+**/build/
+**/*.apk
+**/*.aab
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.log
+~$*
