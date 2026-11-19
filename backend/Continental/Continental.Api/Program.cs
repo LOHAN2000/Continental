@@ -180,11 +180,17 @@ using (var scope = app.Services.CreateScope())
 
 app.UseGlobalExceptionHandling();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint(
+        "/swagger/v1/swagger.json",
+        "Continental API v1"
+    );
+
+    options.RoutePrefix = "swagger";
+});
 
 app.UseHttpsRedirection();
 
