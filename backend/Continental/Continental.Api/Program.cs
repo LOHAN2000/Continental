@@ -1,5 +1,6 @@
 using Continental.Api.DataAccess;
 using Continental.Api.Services.Auth;
+using Continental.Api.Services.Ajustes;
 using Continental.Api.Services.Categorias;
 using Continental.Api.Services.Compras;
 using Continental.Api.Services.Inventario;
@@ -44,6 +45,8 @@ builder.Services.AddScoped<ICompraService, CompraService>();
 builder.Services.AddScoped<ILoteService, LoteService>();
 
 builder.Services.AddScoped<IInventarioService, InventarioService>();
+
+builder.Services.AddScoped<IAjusteInventarioService, AjusteInventarioService>();
 
 var jwtSection = builder.Configuration
     .GetSection("JwtSettings");
