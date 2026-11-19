@@ -110,7 +110,25 @@ builder.Services
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler =
+            System.Text.Json.Serialization
+            .ReferenceHandler.IgnoreCycles;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -194,11 +212,27 @@ app.UseSwaggerUI(options =>
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowFrontend");
+
+// Primero identifica al usuario.
 app.UseAuthentication();
 
+// Después comprueba sus permisos.
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet(
+    "/",
+    () => Results.Ok(new
+    {
+        application = "Continental API",
+        status = "Online",
+        documentation = "/swagger",
+        health = "/health"
+    })
+)
+.AllowAnonymous();
 
 app.MapGet(
     "/health",
