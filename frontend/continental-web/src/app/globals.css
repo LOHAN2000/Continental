@@ -24,3 +24,43 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer components {
+  .input-style {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    padding: 0.75rem 1rem;
+    color: #0f172a;
+    outline: none;
+    transition:
+      border-color 150ms,
+      box-shadow 150ms;
+  }
+
+  .input-style:focus {
+    border-color: #d90016;
+    box-shadow:
+      0 0 0 4px rgb(254 226 226);
+  }
+
+  .input-style:disabled {
+    cursor: not-allowed;
+    background: #f1f5f9;
+  }
+
+  select.input-style {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+
+  textarea.input-style {
+    resize: vertical;
+    min-height: 80px;
+  }
+}

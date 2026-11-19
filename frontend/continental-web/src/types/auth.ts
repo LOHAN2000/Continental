@@ -32,8 +32,6 @@ export type SessionResponse = {
   rol: UserRole;
 };
 
-export type ApiErrorResponse = {
-  message?: string;
-  title?: string;
-  errors?: Record<string, string[]>;
-};
+export type {
+  ApiErrorResponse,
+} from "@/lib/api/read-response";

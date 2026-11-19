@@ -7,10 +7,10 @@ import {
   useState,
 } from "react";
 
+import { readApiResponse } from "@/lib/api/read-response";
 import type {
   CategoriesResponse,
   Category,
-  CategoryErrorResponse,
   CategoryFormData,
   CategoryResponse,
 } from "@/types/categories";
@@ -64,13 +64,10 @@ export function CategoryManager() {
       }
 
       const body =
-        (await response.json()) as CategoriesResponse;
-
-      if (!response.ok) {
-        throw new Error(
+        await readApiResponse<CategoriesResponse>(
+          response,
           "No fue posible cargar las categorías."
         );
-      }
 
       setCategories(body.data);
     } catch (error) {
@@ -160,16 +157,10 @@ export function CategoryManager() {
         }
 
         const body =
-          (await response.json()) as
-            | CategoryResponse
-            | CategoryErrorResponse;
-
-        if (!response.ok) {
-          throw new Error(
-            body.message ??
-              "No fue posible actualizar la categoría."
+          await readApiResponse<CategoryResponse>(
+            response,
+            "No fue posible actualizar la categoría."
           );
-        }
 
         showMessage(
           body.message ??
@@ -197,16 +188,10 @@ export function CategoryManager() {
         }
 
         const body =
-          (await response.json()) as
-            | CategoryResponse
-            | CategoryErrorResponse;
-
-        if (!response.ok) {
-          throw new Error(
-            body.message ??
-              "No fue posible crear la categoría."
+          await readApiResponse<CategoryResponse>(
+            response,
+            "No fue posible crear la categoría."
           );
-        }
 
         showMessage(
           body.message ??
@@ -254,14 +239,10 @@ export function CategoryManager() {
         return;
       }
 
-      if (!response.ok) {
-        const body =
-          (await response.json()) as CategoryErrorResponse;
-        throw new Error(
-          body.message ??
-            "No fue posible cambiar el estado."
-        );
-      }
+      await readApiResponse<unknown>(
+        response,
+        "No fue posible cambiar el estado."
+      );
 
       showMessage(
         category.activo

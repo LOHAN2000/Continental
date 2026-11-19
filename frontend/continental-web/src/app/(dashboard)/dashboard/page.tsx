@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { StatCard } from "@/components/dashboard/stat-card";
+import { readApiResponse } from "@/lib/api/read-response";
 import { serverApiFetch } from "@/lib/api/server-api";
 import {
   formatCurrency,
@@ -28,14 +29,11 @@ export default async function DashboardPage() {
       "/api/reportes/dashboard"
     );
 
-    if (!response.ok) {
-      throw new Error(
+    const body =
+      await readApiResponse<DashboardResponse>(
+        response,
         "No fue posible cargar el dashboard."
       );
-    }
-
-    const body =
-      (await response.json()) as DashboardResponse;
 
     const dashboard = body.data;
 

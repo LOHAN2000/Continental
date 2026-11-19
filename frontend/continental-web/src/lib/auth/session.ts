@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 
 import { API_URL } from "@/lib/api-url";
+import { readApiResponse } from "@/lib/api/read-response";
 import type {
   SessionResponse,
   SessionUser,
@@ -34,7 +35,10 @@ export async function getSession():
     }
 
     const session =
-      (await response.json()) as SessionResponse;
+      await readApiResponse<SessionResponse>(
+        response,
+        "No se pudo validar la sesión."
+      );
 
     return {
       idUsuario: session.idUsuario,

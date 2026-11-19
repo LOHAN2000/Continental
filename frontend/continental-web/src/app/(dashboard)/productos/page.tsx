@@ -1,10 +1,15 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function ProductosPage() {
-  return (
-    <ModulePlaceholder
-      title="Catálogo de productos"
-      description="Administra el inventario completo: nombres, códigos, precios, stock y lotes."
-    />
-  );
+import { ProductManager } from "@/components/products/product-manager";
+
+import { getSession } from "@/lib/auth/session";
+
+export default async function ProductsPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <ProductManager user={user} />;
 }

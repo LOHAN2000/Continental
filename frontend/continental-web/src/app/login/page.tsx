@@ -3,9 +3,8 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type LoginError = {
-  message?: string;
-};
+import { readApiResponse } from "@/lib/api/read-response";
+import type { LoginResponse } from "@/types/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -50,23 +49,20 @@ export default function LoginPage() {
         }
       );
 
-      const body =
-        (await response.json()) as LoginError;
-
-      if (!response.ok) {
-        setMessage(
-          body.message ??
-            "Correo o contraseña incorrectos."
-        );
-
-        return;
-      }
+      await readApiResponse<LoginResponse>(
+        response,
+        "Correo o contraseña incorrectos."
+      );
 
       router.replace("/dashboard");
       router.refresh();
-    } catch {
+    } catch (error) {
       setMessage(
-        "No fue posible conectar con el servidor."
+        error instanceof TypeError
+          ? "No fue posible conectar con el servidor."
+          : error instanceof Error
+          ? error.message
+          : "No fue posible conectar con el servidor."
       );
     } finally {
       setIsLoading(false);
