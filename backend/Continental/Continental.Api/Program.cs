@@ -1,4 +1,5 @@
 using Continental.Api.DataAccess;
+using Continental.Api.Middleware;
 using Continental.Api.Services.Auth;
 using Continental.Api.Services.Ajustes;
 using Continental.Api.Services.Alertas;
@@ -175,6 +176,8 @@ using (var scope = app.Services.CreateScope())
         builder.Configuration
     );
 }
+
+app.UseGlobalExceptionHandling();
 
 if (app.Environment.IsDevelopment())
 {
