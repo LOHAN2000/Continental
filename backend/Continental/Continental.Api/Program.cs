@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -200,10 +201,9 @@ app.MapGet(
     ) =>
     {
         var databaseConnected =
-            await context.Database
-                .CanConnectAsync();
+            await context.Database.CanConnectAsync();
 
-        return Results.Ok(new
+        var response = new
         {
             application = "Continental API",
             status = databaseConnected
@@ -213,7 +213,15 @@ app.MapGet(
                 ? "Connected"
                 : "Disconnected",
             timestamp = DateTime.UtcNow
-        });
+        };
+
+        return databaseConnected
+            ? Results.Ok(response)
+            : Results.Json(
+                response,
+                statusCode:
+                    StatusCodes.Status503ServiceUnavailable
+            );
     }
 )
 .AllowAnonymous();
