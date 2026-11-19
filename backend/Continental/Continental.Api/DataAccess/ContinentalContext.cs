@@ -15,6 +15,8 @@ public class ContinentalContext : DbContext
 
     public DbSet<Usuario> Usuarios => Set<Usuario>();
 
+    public DbSet<Categoria> Categorias => Set<Categoria>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -23,6 +25,7 @@ public class ContinentalContext : DbContext
 
         ConfigureRol(modelBuilder);
         ConfigureUsuario(modelBuilder);
+        ConfigureCategoria(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -63,6 +66,24 @@ public class ContinentalContext : DbContext
                 .WithMany(rol => rol.Usuarios)
                 .HasForeignKey(usuario => usuario.IdRol)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
+
+    private static void ConfigureCategoria(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Categoria>(entity =>
+        {
+            entity.HasIndex(categoria => categoria.Nombre)
+                .IsUnique();
+
+            entity.Property(categoria => categoria.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(categoria => categoria.UpdatedAt)
+                .HasColumnName("actualizado_en");
         });
     }
 
