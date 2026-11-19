@@ -9,6 +9,7 @@ using Continental.Api.Services.Lotes;
 using Continental.Api.Services.Productos;
 using Continental.Api.Services.Proveedores;
 using Continental.Api.Services.Reportes;
+using Continental.Api.Services.Usuarios;
 using Continental.Api.Services.Ventas;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,8 @@ builder.Services.AddScoped<IVentaService, VentaService>();
 builder.Services.AddScoped<IAlertaService, AlertaService>();
 
 builder.Services.AddScoped<IReporteService, ReporteService>();
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 var jwtSection = builder.Configuration
     .GetSection("JwtSettings");
@@ -186,5 +189,30 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGet(
+    "/health",
+    async (
+        ContinentalContext context
+    ) =>
+    {
+        var databaseConnected =
+            await context.Database
+                .CanConnectAsync();
+
+        return Results.Ok(new
+        {
+            application = "Continental API",
+            status = databaseConnected
+                ? "Healthy"
+                : "Degraded",
+            database = databaseConnected
+                ? "Connected"
+                : "Disconnected",
+            timestamp = DateTime.UtcNow
+        });
+    }
+)
+.AllowAnonymous();
 
 app.Run();
