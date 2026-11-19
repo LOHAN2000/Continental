@@ -41,4 +41,7 @@ public class Usuario : BaseEntity
 
     public ICollection<MovimientoInventario> MovimientosInventario
         { get; set; } = new List<MovimientoInventario>();
+
+    public ICollection<Venta> Ventas { get; set; } =
+        new List<Venta>();
 }

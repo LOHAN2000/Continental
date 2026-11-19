@@ -29,6 +29,10 @@ public class ContinentalContext : DbContext
 
     public DbSet<Lote> Lotes => Set<Lote>();
 
+    public DbSet<Venta> Ventas => Set<Venta>();
+
+    public DbSet<VentaDetalle> VentaDetalles => Set<VentaDetalle>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -44,6 +48,8 @@ public class ContinentalContext : DbContext
         ConfigureCompraDetalle(modelBuilder);
         ConfigureMovimientoInventario(modelBuilder);
         ConfigureLote(modelBuilder);
+        ConfigureVenta(modelBuilder);
+        ConfigureVentaDetalle(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -326,6 +332,78 @@ public class ContinentalContext : DbContext
                 .WithMany(detalle => detalle.Lotes)
                 .HasForeignKey(lote =>
                     lote.IdCompraDetalle)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+    }
+
+    private static void ConfigureVenta(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Venta>(entity =>
+        {
+            entity.Property(venta => venta.Total)
+                .HasPrecision(12, 2);
+
+            entity.Property(venta => venta.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(venta => venta.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(venta => venta.Usuario)
+                .WithMany(usuario => usuario.Ventas)
+                .HasForeignKey(venta => venta.IdUsuario)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(venta => venta.Fecha);
+        });
+    }
+
+    private static void ConfigureVentaDetalle(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<VentaDetalle>(entity =>
+        {
+            entity.Property(detalle => detalle.Cantidad)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle => detalle.PrecioUnitario)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle =>
+                    detalle.CostoHistoricoUnitario)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle => detalle.Subtotal)
+                .HasPrecision(12, 2);
+
+            entity.Property(detalle => detalle.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(detalle => detalle.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(detalle => detalle.Venta)
+                .WithMany(venta => venta.Detalles)
+                .HasForeignKey(detalle => detalle.IdVenta)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(detalle => detalle.Producto)
+                .WithMany(producto =>
+                    producto.VentaDetalles)
+                .HasForeignKey(detalle =>
+                    detalle.IdProducto)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(detalle => detalle.Lote)
+                .WithMany(lote =>
+                    lote.VentaDetalles)
+                .HasForeignKey(detalle =>
+                    detalle.IdLote)
                 .OnDelete(DeleteBehavior.SetNull);
         });
     }

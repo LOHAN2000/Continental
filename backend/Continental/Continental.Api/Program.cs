@@ -7,6 +7,7 @@ using Continental.Api.Services.Inventario;
 using Continental.Api.Services.Lotes;
 using Continental.Api.Services.Productos;
 using Continental.Api.Services.Proveedores;
+using Continental.Api.Services.Ventas;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -47,6 +48,8 @@ builder.Services.AddScoped<ILoteService, LoteService>();
 builder.Services.AddScoped<IInventarioService, InventarioService>();
 
 builder.Services.AddScoped<IAjusteInventarioService, AjusteInventarioService>();
+
+builder.Services.AddScoped<IVentaService, VentaService>();
 
 var jwtSection = builder.Configuration
     .GetSection("JwtSettings");

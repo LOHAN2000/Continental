@@ -57,4 +57,7 @@ public class Producto : BaseEntity
 
     public ICollection<Lote> Lotes { get; set; } =
         new List<Lote>();
+
+    public ICollection<VentaDetalle> VentaDetalles { get; set; } =
+        new List<VentaDetalle>();
 }

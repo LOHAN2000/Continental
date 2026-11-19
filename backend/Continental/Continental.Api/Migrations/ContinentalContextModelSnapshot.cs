@@ -543,6 +543,120 @@ namespace Continental.Api.Migrations
                     b.ToTable("usuarios");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Venta", b =>
+                {
+                    b.Property<long>("IdVenta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_venta");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("IdVenta"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creado_en")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("estado");
+
+                    b.Property<DateTime>("Fecha")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("fecha");
+
+                    b.Property<long>("IdUsuario")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_usuario");
+
+                    b.Property<string>("Observacion")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("observacion");
+
+                    b.Property<decimal>("Total")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("total");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("actualizado_en");
+
+                    b.HasKey("IdVenta");
+
+                    b.HasIndex("Fecha");
+
+                    b.HasIndex("IdUsuario");
+
+                    b.ToTable("ventas");
+                });
+
+            modelBuilder.Entity("Continental.Api.Models.DataModels.VentaDetalle", b =>
+                {
+                    b.Property<long>("IdVentaDetalle")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_venta_detalle");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("IdVentaDetalle"));
+
+                    b.Property<decimal>("Cantidad")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("cantidad");
+
+                    b.Property<decimal>("CostoHistoricoUnitario")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("costo_historico_unitario");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creado_en")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<long?>("IdLote")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_lote");
+
+                    b.Property<long>("IdProducto")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_producto");
+
+                    b.Property<long>("IdVenta")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_venta");
+
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("precio_unitario");
+
+                    b.Property<decimal>("Subtotal")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("subtotal");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("actualizado_en");
+
+                    b.HasKey("IdVentaDetalle");
+
+                    b.HasIndex("IdLote");
+
+                    b.HasIndex("IdProducto");
+
+                    b.HasIndex("IdVenta");
+
+                    b.ToTable("venta_detalles");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Compra", b =>
                 {
                     b.HasOne("Continental.Api.Models.DataModels.Proveedor", "Proveedor")
@@ -640,6 +754,43 @@ namespace Continental.Api.Migrations
                     b.Navigation("Rol");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Venta", b =>
+                {
+                    b.HasOne("Continental.Api.Models.DataModels.Usuario", "Usuario")
+                        .WithMany("Ventas")
+                        .HasForeignKey("IdUsuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Continental.Api.Models.DataModels.VentaDetalle", b =>
+                {
+                    b.HasOne("Continental.Api.Models.DataModels.Lote", "Lote")
+                        .WithMany("VentaDetalles")
+                        .HasForeignKey("IdLote")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Continental.Api.Models.DataModels.Producto", "Producto")
+                        .WithMany("VentaDetalles")
+                        .HasForeignKey("IdProducto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Continental.Api.Models.DataModels.Venta", "Venta")
+                        .WithMany("Detalles")
+                        .HasForeignKey("IdVenta")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lote");
+
+                    b.Navigation("Producto");
+
+                    b.Navigation("Venta");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Categoria", b =>
                 {
                     b.Navigation("Productos");
@@ -655,6 +806,11 @@ namespace Continental.Api.Migrations
                     b.Navigation("Lotes");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Lote", b =>
+                {
+                    b.Navigation("VentaDetalles");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Producto", b =>
                 {
                     b.Navigation("CompraDetalles");
@@ -662,6 +818,8 @@ namespace Continental.Api.Migrations
                     b.Navigation("Lotes");
 
                     b.Navigation("MovimientosInventario");
+
+                    b.Navigation("VentaDetalles");
                 });
 
             modelBuilder.Entity("Continental.Api.Models.DataModels.Proveedor", b =>
@@ -679,6 +837,13 @@ namespace Continental.Api.Migrations
                     b.Navigation("Compras");
 
                     b.Navigation("MovimientosInventario");
+
+                    b.Navigation("Ventas");
+                });
+
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Venta", b =>
+                {
+                    b.Navigation("Detalles");
                 });
 #pragma warning restore 612, 618
         }

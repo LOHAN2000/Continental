@@ -45,4 +45,7 @@ public class Lote : BaseEntity
 
     [ForeignKey(nameof(IdCompraDetalle))]
     public CompraDetalle? CompraDetalle { get; set; }
+
+    public ICollection<VentaDetalle> VentaDetalles { get; set; } =
+        new List<VentaDetalle>();
 }
