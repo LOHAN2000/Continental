@@ -1,10 +1,14 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function InventarioPage() {
-  return (
-    <ModulePlaceholder
-      title="Inventario"
-      description="Consulta stock actual, kardex de movimientos y alertas de stock mínimo."
-    />
-  );
+import { InventoryManager } from "@/components/inventory/inventory-manager";
+import { getSession } from "@/lib/auth/session";
+
+export default async function InventoryPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <InventoryManager />;
 }
