@@ -1,10 +1,19 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function ProveedoresPage() {
-  return (
-    <ModulePlaceholder
-      title="Gestión de proveedores"
-      description="Registra y administra los proveedores para las órdenes de compra."
-    />
-  );
+import { ProviderManager } from "@/components/providers/provider-manager";
+
+import { getSession } from "@/lib/auth/session";
+
+export default async function ProvidersPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (user.rol !== "PROPIETARIO") {
+    redirect("/dashboard");
+  }
+
+  return <ProviderManager />;
 }

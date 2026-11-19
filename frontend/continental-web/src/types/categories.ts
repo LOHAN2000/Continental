@@ -21,6 +21,8 @@ export type CategoryResponse = {
   data: Category;
 };
 
-export type {
-  ApiErrorResponse as CategoryErrorResponse,
-} from "@/lib/api/read-response";
+export type CategoryErrorResponse = {
+  message?: string;
+  title?: string;
+  errors?: Record<string, string[]>;
+};
