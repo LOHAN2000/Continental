@@ -1,6 +1,7 @@
 using Continental.Api.DataAccess;
 using Continental.Api.Services.Auth;
 using Continental.Api.Services.Categorias;
+using Continental.Api.Services.Productos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,8 @@ builder.Services.AddDbContext<ContinentalContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+
+builder.Services.AddScoped<IProductoService, ProductoService>();
 
 var jwtSection = builder.Configuration
     .GetSection("JwtSettings");

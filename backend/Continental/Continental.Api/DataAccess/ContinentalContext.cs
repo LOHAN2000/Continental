@@ -17,6 +17,8 @@ public class ContinentalContext : DbContext
 
     public DbSet<Categoria> Categorias => Set<Categoria>();
 
+    public DbSet<Producto> Productos => Set<Producto>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -26,6 +28,7 @@ public class ContinentalContext : DbContext
         ConfigureRol(modelBuilder);
         ConfigureUsuario(modelBuilder);
         ConfigureCategoria(modelBuilder);
+        ConfigureProducto(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -84,6 +87,53 @@ public class ContinentalContext : DbContext
 
             entity.Property(categoria => categoria.UpdatedAt)
                 .HasColumnName("actualizado_en");
+        });
+    }
+
+    private static void ConfigureProducto(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Producto>(entity =>
+        {
+            entity.HasIndex(producto =>
+                    producto.CodigoBarras)
+                .IsUnique();
+
+            entity.Property(producto =>
+                    producto.PrecioCompra)
+                .HasPrecision(12, 2);
+
+            entity.Property(producto =>
+                    producto.PrecioVenta)
+                .HasPrecision(12, 2);
+
+            entity.Property(producto =>
+                    producto.StockActual)
+                .HasPrecision(12, 2)
+                .HasDefaultValue(0);
+
+            entity.Property(producto =>
+                    producto.StockMinimo)
+                .HasPrecision(12, 2)
+                .HasDefaultValue(0);
+
+            entity.Property(producto =>
+                    producto.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(producto =>
+                    producto.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(producto =>
+                    producto.Categoria)
+                .WithMany(categoria =>
+                    categoria.Productos)
+                .HasForeignKey(producto =>
+                    producto.IdCategoria)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 

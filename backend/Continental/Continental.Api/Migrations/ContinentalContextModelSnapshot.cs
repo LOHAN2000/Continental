@@ -64,6 +64,88 @@ namespace Continental.Api.Migrations
                     b.ToTable("categorias");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Producto", b =>
+                {
+                    b.Property<long>("IdProducto")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_producto");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("IdProducto"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean")
+                        .HasColumnName("activo");
+
+                    b.Property<string>("CodigoBarras")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("codigo_barras");
+
+                    b.Property<bool>("ControlaVencimiento")
+                        .HasColumnType("boolean")
+                        .HasColumnName("controla_vencimiento");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creado_en")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Descripcion")
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)")
+                        .HasColumnName("descripcion");
+
+                    b.Property<long>("IdCategoria")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_categoria");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)")
+                        .HasColumnName("nombre");
+
+                    b.Property<decimal>("PrecioCompra")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("precio_compra");
+
+                    b.Property<decimal>("PrecioVenta")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("precio_venta");
+
+                    b.Property<decimal>("StockActual")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasDefaultValue(0m)
+                        .HasColumnName("stock_actual");
+
+                    b.Property<decimal>("StockMinimo")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasDefaultValue(0m)
+                        .HasColumnName("stock_minimo");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("actualizado_en");
+
+                    b.HasKey("IdProducto");
+
+                    b.HasIndex("CodigoBarras")
+                        .IsUnique();
+
+                    b.HasIndex("IdCategoria");
+
+                    b.ToTable("productos");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Rol", b =>
                 {
                     b.Property<long>("IdRol")
@@ -161,6 +243,17 @@ namespace Continental.Api.Migrations
                     b.ToTable("usuarios");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Producto", b =>
+                {
+                    b.HasOne("Continental.Api.Models.DataModels.Categoria", "Categoria")
+                        .WithMany("Productos")
+                        .HasForeignKey("IdCategoria")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Usuario", b =>
                 {
                     b.HasOne("Continental.Api.Models.DataModels.Rol", "Rol")
@@ -170,6 +263,11 @@ namespace Continental.Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Rol");
+                });
+
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Categoria", b =>
+                {
+                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("Continental.Api.Models.DataModels.Rol", b =>

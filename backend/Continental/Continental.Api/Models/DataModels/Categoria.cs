@@ -21,4 +21,7 @@ public class Categoria : BaseEntity
 
     [Column("activo")]
     public bool Activo { get; set; } = true;
+
+    public ICollection<Producto> Productos { get; set; } =
+        new List<Producto>();
 }
