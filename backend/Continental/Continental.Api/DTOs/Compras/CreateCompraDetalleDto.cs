@@ -25,4 +25,13 @@ public class CreateCompraDetalleDto
         "El costo unitario debe ser mayor o igual a cero."
     )]
     public decimal CostoUnitario { get; set; }
+
+    [MaxLength(
+        60,
+        ErrorMessage =
+        "El código de lote no puede superar 60 caracteres."
+    )]
+    public string? CodigoLote { get; set; }
+
+    public DateOnly? FechaVencimiento { get; set; }
 }

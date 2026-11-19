@@ -32,4 +32,7 @@ public class CompraDetalle : BaseEntity
 
     [ForeignKey(nameof(IdProducto))]
     public Producto Producto { get; set; } = null!;
+
+    public ICollection<Lote> Lotes { get; set; } =
+        new List<Lote>();
 }

@@ -54,4 +54,7 @@ public class Producto : BaseEntity
 
     public ICollection<MovimientoInventario> MovimientosInventario
         { get; set; } = new List<MovimientoInventario>();
+
+    public ICollection<Lote> Lotes { get; set; } =
+        new List<Lote>();
 }

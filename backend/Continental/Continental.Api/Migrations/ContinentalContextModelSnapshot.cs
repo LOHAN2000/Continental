@@ -173,6 +173,69 @@ namespace Continental.Api.Migrations
                     b.ToTable("compra_detalles");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Lote", b =>
+                {
+                    b.Property<long>("IdLote")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_lote");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("IdLote"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("boolean")
+                        .HasColumnName("activo");
+
+                    b.Property<decimal>("CantidadDisponible")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("cantidad_disponible");
+
+                    b.Property<decimal>("CantidadInicial")
+                        .HasPrecision(12, 2)
+                        .HasColumnType("numeric(12,2)")
+                        .HasColumnName("cantidad_inicial");
+
+                    b.Property<string>("CodigoLote")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)")
+                        .HasColumnName("codigo_lote");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creado_en")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateOnly>("FechaVencimiento")
+                        .HasColumnType("date")
+                        .HasColumnName("fecha_vencimiento");
+
+                    b.Property<long?>("IdCompraDetalle")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_compra_detalle");
+
+                    b.Property<long>("IdProducto")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_producto");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("actualizado_en");
+
+                    b.HasKey("IdLote");
+
+                    b.HasIndex("FechaVencimiento");
+
+                    b.HasIndex("IdCompraDetalle");
+
+                    b.HasIndex("IdProducto", "CodigoLote")
+                        .IsUnique();
+
+                    b.ToTable("lotes");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.MovimientoInventario", b =>
                 {
                     b.Property<long>("IdMovimiento")
@@ -518,6 +581,24 @@ namespace Continental.Api.Migrations
                     b.Navigation("Producto");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Lote", b =>
+                {
+                    b.HasOne("Continental.Api.Models.DataModels.CompraDetalle", "CompraDetalle")
+                        .WithMany("Lotes")
+                        .HasForeignKey("IdCompraDetalle")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Continental.Api.Models.DataModels.Producto", "Producto")
+                        .WithMany("Lotes")
+                        .HasForeignKey("IdProducto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CompraDetalle");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.MovimientoInventario", b =>
                 {
                     b.HasOne("Continental.Api.Models.DataModels.Producto", "Producto")
@@ -569,9 +650,16 @@ namespace Continental.Api.Migrations
                     b.Navigation("Detalles");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.CompraDetalle", b =>
+                {
+                    b.Navigation("Lotes");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Producto", b =>
                 {
                     b.Navigation("CompraDetalles");
+
+                    b.Navigation("Lotes");
 
                     b.Navigation("MovimientosInventario");
                 });

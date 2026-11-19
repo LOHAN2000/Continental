@@ -27,6 +27,8 @@ public class ContinentalContext : DbContext
 
     public DbSet<MovimientoInventario> MovimientosInventario => Set<MovimientoInventario>();
 
+    public DbSet<Lote> Lotes => Set<Lote>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -41,6 +43,7 @@ public class ContinentalContext : DbContext
         ConfigureCompra(modelBuilder);
         ConfigureCompraDetalle(modelBuilder);
         ConfigureMovimientoInventario(modelBuilder);
+        ConfigureLote(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -277,6 +280,53 @@ public class ContinentalContext : DbContext
                 movimiento.IdProducto,
                 movimiento.Fecha
             });
+        });
+    }
+
+    private static void ConfigureLote(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Lote>(entity =>
+        {
+            entity.HasIndex(lote => new
+            {
+                lote.IdProducto,
+                lote.CodigoLote
+            })
+                .IsUnique();
+
+            entity.HasIndex(lote =>
+                lote.FechaVencimiento);
+
+            entity.Property(lote =>
+                    lote.CantidadInicial)
+                .HasPrecision(12, 2);
+
+            entity.Property(lote =>
+                    lote.CantidadDisponible)
+                .HasPrecision(12, 2);
+
+            entity.Property(lote =>
+                    lote.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(lote =>
+                    lote.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(lote => lote.Producto)
+                .WithMany(producto => producto.Lotes)
+                .HasForeignKey(lote => lote.IdProducto)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(lote =>
+                    lote.CompraDetalle)
+                .WithMany(detalle => detalle.Lotes)
+                .HasForeignKey(lote =>
+                    lote.IdCompraDetalle)
+                .OnDelete(DeleteBehavior.SetNull);
         });
     }
 

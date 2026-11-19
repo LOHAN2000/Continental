@@ -138,6 +138,25 @@ public class CompraService : ICompraService
             );
         }
 
+        var currentDate = DateOnly.FromDateTime(
+            DateTime.UtcNow
+        );
+
+        var invalidExpiration = request.Detalles.Any(
+            detalle =>
+                detalle.FechaVencimiento.HasValue &&
+                detalle.FechaVencimiento.Value <= currentDate
+        );
+
+        if (invalidExpiration)
+        {
+            return CompraResult.Fail(
+                "La fecha de vencimiento debe ser posterior " +
+                "a la fecha actual.",
+                CompraError.InvalidDetails
+            );
+        }
+
         var repeatedProduct = request.Detalles
             .GroupBy(detalle => detalle.IdProducto)
             .Any(group => group.Count() > 1);
@@ -184,6 +203,28 @@ public class CompraService : ICompraService
             );
         }
 
+        foreach (var detailRequest in request.Detalles)
+        {
+            var product = products.Single(producto =>
+                producto.IdProducto ==
+                detailRequest.IdProducto
+            );
+
+            if (product.ControlaVencimiento)
+            {
+                if (string.IsNullOrWhiteSpace(
+                        detailRequest.CodigoLote) ||
+                    !detailRequest.FechaVencimiento.HasValue)
+                {
+                    return CompraResult.Fail(
+                        $"El producto {product.Nombre} requiere " +
+                        "código de lote y fecha de vencimiento.",
+                        CompraError.InvalidDetails
+                    );
+                }
+            }
+        }
+
         await using var transaction =
             await _context.Database
                 .BeginTransactionAsync();
@@ -216,22 +257,22 @@ public class CompraService : ICompraService
                     MidpointRounding.AwayFromZero
                 );
 
-                compra.Detalles.Add(
-                    new CompraDetalle
-                    {
-                        IdProducto =
-                            product.IdProducto,
+                var purchaseDetail = new CompraDetalle
+                {
+                    IdProducto =
+                        product.IdProducto,
 
-                        Cantidad =
-                            detailRequest.Cantidad,
+                    Cantidad =
+                        detailRequest.Cantidad,
 
-                        CostoUnitario =
-                            detailRequest.CostoUnitario,
+                    CostoUnitario =
+                        detailRequest.CostoUnitario,
 
-                        Subtotal =
-                            subtotal
-                    }
-                );
+                    Subtotal =
+                        subtotal
+                };
+
+                compra.Detalles.Add(purchaseDetail);
 
                 product.StockActual +=
                     detailRequest.Cantidad;
@@ -245,6 +286,68 @@ public class CompraService : ICompraService
 
             await _context.Compras.AddAsync(compra);
             await _context.SaveChangesAsync();
+
+            foreach (var detailRequest in request.Detalles)
+            {
+                if (string.IsNullOrWhiteSpace(
+                        detailRequest.CodigoLote) ||
+                    !detailRequest.FechaVencimiento.HasValue)
+                {
+                    continue;
+                }
+
+                var purchaseDetail = compra.Detalles
+                    .Single(detalle =>
+                        detalle.IdProducto ==
+                        detailRequest.IdProducto
+                    );
+
+                var lotCode = detailRequest.CodigoLote
+                    .Trim();
+
+                var duplicateLot = await _context.Lotes
+                    .AnyAsync(lote =>
+                        lote.IdProducto ==
+                        detailRequest.IdProducto &&
+                        lote.CodigoLote == lotCode
+                    );
+
+                if (duplicateLot)
+                {
+                    await transaction.RollbackAsync();
+
+                    return CompraResult.Fail(
+                        $"El lote {lotCode} ya está registrado " +
+                        "para el producto seleccionado.",
+                        CompraError.InvalidDetails
+                    );
+                }
+
+                var batch = new Lote
+                {
+                    IdProducto =
+                        detailRequest.IdProducto,
+
+                    IdCompraDetalle =
+                        purchaseDetail.IdCompraDetalle,
+
+                    CodigoLote =
+                        lotCode,
+
+                    CantidadInicial =
+                        detailRequest.Cantidad,
+
+                    CantidadDisponible =
+                        detailRequest.Cantidad,
+
+                    FechaVencimiento =
+                        detailRequest.FechaVencimiento.Value,
+
+                    Activo = true
+                };
+
+                await _context.Lotes.AddAsync(batch);
+            }
 
             foreach (var detail in compra.Detalles)
             {
