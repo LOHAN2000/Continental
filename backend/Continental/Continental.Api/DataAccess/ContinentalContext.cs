@@ -19,6 +19,8 @@ public class ContinentalContext : DbContext
 
     public DbSet<Producto> Productos => Set<Producto>();
 
+    public DbSet<Proveedor> Proveedores => Set<Proveedor>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -29,6 +31,7 @@ public class ContinentalContext : DbContext
         ConfigureUsuario(modelBuilder);
         ConfigureCategoria(modelBuilder);
         ConfigureProducto(modelBuilder);
+        ConfigureProveedor(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -134,6 +137,27 @@ public class ContinentalContext : DbContext
                 .HasForeignKey(producto =>
                     producto.IdCategoria)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+    }
+
+    private static void ConfigureProveedor(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Proveedor>(entity =>
+        {
+            entity.HasIndex(proveedor =>
+                    proveedor.Documento)
+                .IsUnique();
+
+            entity.Property(proveedor =>
+                    proveedor.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(proveedor =>
+                    proveedor.UpdatedAt)
+                .HasColumnName("actualizado_en");
         });
     }
 
