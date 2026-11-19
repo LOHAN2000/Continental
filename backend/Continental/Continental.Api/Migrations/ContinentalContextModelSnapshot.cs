@@ -22,6 +22,66 @@ namespace Continental.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Alerta", b =>
+                {
+                    b.Property<long>("IdAlerta")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_alerta");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("IdAlerta"));
+
+                    b.Property<bool>("Activa")
+                        .HasColumnType("boolean")
+                        .HasColumnName("activa");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creado_en")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<long?>("IdLote")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_lote");
+
+                    b.Property<long>("IdProducto")
+                        .HasColumnType("bigint")
+                        .HasColumnName("id_producto");
+
+                    b.Property<bool>("Leida")
+                        .HasColumnType("boolean")
+                        .HasColumnName("leida");
+
+                    b.Property<string>("Mensaje")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)")
+                        .HasColumnName("mensaje");
+
+                    b.Property<string>("Tipo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("tipo");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("actualizado_en");
+
+                    b.HasKey("IdAlerta");
+
+                    b.HasIndex("IdLote");
+
+                    b.HasIndex("IdProducto");
+
+                    b.HasIndex("Tipo");
+
+                    b.HasIndex("Activa", "Leida");
+
+                    b.ToTable("alertas");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Categoria", b =>
                 {
                     b.Property<long>("IdCategoria")
@@ -657,6 +717,24 @@ namespace Continental.Api.Migrations
                     b.ToTable("venta_detalles");
                 });
 
+            modelBuilder.Entity("Continental.Api.Models.DataModels.Alerta", b =>
+                {
+                    b.HasOne("Continental.Api.Models.DataModels.Lote", "Lote")
+                        .WithMany("Alertas")
+                        .HasForeignKey("IdLote")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Continental.Api.Models.DataModels.Producto", "Producto")
+                        .WithMany("Alertas")
+                        .HasForeignKey("IdProducto")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Lote");
+
+                    b.Navigation("Producto");
+                });
+
             modelBuilder.Entity("Continental.Api.Models.DataModels.Compra", b =>
                 {
                     b.HasOne("Continental.Api.Models.DataModels.Proveedor", "Proveedor")
@@ -808,11 +886,15 @@ namespace Continental.Api.Migrations
 
             modelBuilder.Entity("Continental.Api.Models.DataModels.Lote", b =>
                 {
+                    b.Navigation("Alertas");
+
                     b.Navigation("VentaDetalles");
                 });
 
             modelBuilder.Entity("Continental.Api.Models.DataModels.Producto", b =>
                 {
+                    b.Navigation("Alertas");
+
                     b.Navigation("CompraDetalles");
 
                     b.Navigation("Lotes");

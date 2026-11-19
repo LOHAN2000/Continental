@@ -60,4 +60,7 @@ public class Producto : BaseEntity
 
     public ICollection<VentaDetalle> VentaDetalles { get; set; } =
         new List<VentaDetalle>();
+
+    public ICollection<Alerta> Alertas { get; set; } =
+        new List<Alerta>();
 }

@@ -33,6 +33,8 @@ public class ContinentalContext : DbContext
 
     public DbSet<VentaDetalle> VentaDetalles => Set<VentaDetalle>();
 
+    public DbSet<Alerta> Alertas => Set<Alerta>();
+
     protected override void OnModelCreating(
         ModelBuilder modelBuilder
     )
@@ -50,6 +52,7 @@ public class ContinentalContext : DbContext
         ConfigureLote(modelBuilder);
         ConfigureVenta(modelBuilder);
         ConfigureVentaDetalle(modelBuilder);
+        ConfigureAlerta(modelBuilder);
     }
 
     private static void ConfigureRol(
@@ -405,6 +408,39 @@ public class ContinentalContext : DbContext
                 .HasForeignKey(detalle =>
                     detalle.IdLote)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+    }
+
+    private static void ConfigureAlerta(
+        ModelBuilder modelBuilder
+    )
+    {
+        modelBuilder.Entity<Alerta>(entity =>
+        {
+            entity.Property(alerta => alerta.CreatedAt)
+                .HasColumnName("creado_en")
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            entity.Property(alerta => alerta.UpdatedAt)
+                .HasColumnName("actualizado_en");
+
+            entity.HasOne(alerta => alerta.Producto)
+                .WithMany(producto => producto.Alertas)
+                .HasForeignKey(alerta => alerta.IdProducto)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(alerta => alerta.Lote)
+                .WithMany(lote => lote.Alertas)
+                .HasForeignKey(alerta => alerta.IdLote)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasIndex(alerta => alerta.Tipo);
+
+            entity.HasIndex(alerta => new
+            {
+                alerta.Activa,
+                alerta.Leida
+            });
         });
     }
 
