@@ -1,10 +1,14 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function VentasPage() {
-  return (
-    <ModulePlaceholder
-      title="Punto de venta"
-      description="Registra ventas, gestiona pagos y emite comprobantes."
-    />
-  );
+import { SalesManager } from "@/components/sales/sales-manager";
+import { getSession } from "@/lib/auth/session";
+
+export default async function SalesPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <SalesManager user={user} />;
 }
