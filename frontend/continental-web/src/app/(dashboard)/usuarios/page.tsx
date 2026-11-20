@@ -1,10 +1,18 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function UsuariosPage() {
-  return (
-    <ModulePlaceholder
-      title="Gestión de usuarios"
-      description="Administra accesos, roles y credenciales del personal autorizado."
-    />
-  );
+import { UserManager } from "@/components/users/user-manager";
+import { getSession } from "@/lib/auth/session";
+
+export default async function UsersPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (user.rol !== "PROPIETARIO") {
+    redirect("/dashboard");
+  }
+
+  return <UserManager />;
 }

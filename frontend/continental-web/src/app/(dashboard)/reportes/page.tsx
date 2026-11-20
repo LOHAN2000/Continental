@@ -1,10 +1,18 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function ReportesPage() {
-  return (
-    <ModulePlaceholder
-      title="Reportes y análisis"
-      description="Consulta balances financieros, productos más vendidos y rendimiento del negocio."
-    />
-  );
+import { ReportManager } from "@/components/reports/report-manager";
+import { getSession } from "@/lib/auth/session";
+
+export default async function ReportsPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (user.rol !== "PROPIETARIO") {
+    redirect("/dashboard");
+  }
+
+  return <ReportManager />;
 }
