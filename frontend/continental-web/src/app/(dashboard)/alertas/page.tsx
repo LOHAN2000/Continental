@@ -1,10 +1,14 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function AlertasPage() {
-  return (
-    <ModulePlaceholder
-      title="Centro de alertas"
-      description="Revisa alertas de stock mínimo, lotes por vencer y notificaciones del sistema."
-    />
-  );
+import { AlertManager } from "@/components/alerts/alert-manager";
+import { getSession } from "@/lib/auth/session";
+
+export default async function AlertsPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <AlertManager user={user} />;
 }
