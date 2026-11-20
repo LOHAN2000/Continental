@@ -1,10 +1,18 @@
-import { ModulePlaceholder } from "@/components/ui/module-placeholder";
+import { redirect } from "next/navigation";
 
-export default function LotesPage() {
-  return (
-    <ModulePlaceholder
-      title="Control de lotes"
-      description="Consulta trazabilidad de lotes, fechas de vencimiento y stock disponible."
-    />
-  );
+import { BatchManager } from "@/components/batches/batch-manager";
+import { getSession } from "@/lib/auth/session";
+
+export default async function BatchesPage() {
+  const user = await getSession();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  if (user.rol !== "PROPIETARIO") {
+    redirect("/dashboard");
+  }
+
+  return <BatchManager />;
 }
