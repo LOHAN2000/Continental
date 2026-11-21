@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -74,9 +75,14 @@ export default function LoginPage() {
       <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-10">
         <div className="w-full max-w-md">
           <div className="mb-8 flex justify-center lg:hidden">
-            <div className="h-32 w-32 rounded-full bg-[#d90016]/10 flex items-center justify-center">
-              <span className="text-4xl font-bold text-[#d90016]">C</span>
-            </div>
+            <Image
+              src="/brand/logo-continental.png"
+              alt="Logo de Continental"
+              width={160}
+              height={160}
+              className="h-40 w-40 rounded-3xl object-contain"
+              priority
+            />
           </div>
 
           <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-[0_20px_60px_rgba(36,39,42,0.08)] sm:p-10">
@@ -188,9 +194,14 @@ export default function LoginPage() {
         <div className="absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-[#d90016]/10" />
 
         <div className="relative z-10 max-w-xl px-12 text-center">
-          <div className="h-48 w-48 rounded-full bg-[#d90016]/10 flex items-center justify-center mx-auto mb-8">
-            <span className="text-6xl font-bold text-[#d90016]">C</span>
-          </div>
+          <Image
+            src="/brand/logo-continental.png"
+            alt="Logo de Continental"
+            width={240}
+            height={240}
+            className="mx-auto mb-8 h-60 w-60 rounded-3xl object-contain"
+            priority
+          />
 
           <p className="mx-auto mt-6 max-w-md text-lg leading-8 text-[#24272a]">
             Controla el inventario, registra

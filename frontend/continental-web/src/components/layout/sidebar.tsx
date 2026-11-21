@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -53,9 +54,14 @@ export function Sidebar({
             onClick={onClose}
             className="flex items-center gap-3"
           >
-            <div className="h-12 w-12 rounded-xl bg-[#d90016]/10 flex items-center justify-center">
-              <span className="text-xl font-bold text-[#d90016]">C</span>
-            </div>
+            <Image
+              src="/brand/logo-continental.png"
+              alt="Logo de Continental"
+              width={56}
+              height={56}
+              className="h-14 w-14 rounded-xl object-contain"
+              priority
+            />
             <span className="font-bold text-xl text-[#24272a]">Continental</span>
           </Link>
 
@@ -118,7 +124,7 @@ export function Sidebar({
                       "focus:outline-none focus:ring-4 focus:ring-red-100",
                       isActive
                         ? "bg-[#d90016] text-white shadow-sm"
-                        : "text-slate-650 hover:bg-red-50 hover:text-[#a90012]",
+                        : "text-slate-800 hover:bg-red-50 hover:text-[#a90012]",
                     ].join(" ")}
                   >
                     <span
