@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="brand_red">#D90016</color>
+    <color name="brand_red_dark">#A90012</color>
+    <color name="text_primary">#111827</color>
+    <color name="text_secondary">#374151</color>
+    <color name="input_border_unfocused">#6B7280</color>
+    <color name="input_border_focused">#D90016</color>
 </resources>

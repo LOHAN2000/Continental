@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_products"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Productos" />
+
+    <item
+        android:id="@+id/navigation_inventory"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="Inventario" />
+
+    <item
+        android:id="@+id/navigation_scanner"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="Escáner" />
+
+    <item
+        android:id="@+id/navigation_sales"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Ventas" />
+
+    <item
+        android:id="@+id/navigation_alerts"
+        android:icon="@android:drawable/ic_dialog_alert"
+        android:title="Alertas" />
+
+</menu>

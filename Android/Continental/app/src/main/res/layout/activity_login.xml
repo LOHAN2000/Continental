@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Sistema de inventario"
-            android:textColor="#D90016"
+            android:textColor="@color/brand_red"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:text="Iniciar sesión"
-            android:textColor="#24272A"
+            android:textColor="@color/text_primary"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Ingresa tus credenciales para consultar productos, inventario, ventas y alertas."
-            android:textColor="#667085"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -57,7 +57,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:hint="Correo electrónico">
+            android:hint="Correo electrónico"
+            android:textColorHint="@color/text_secondary"
+            app:boxStrokeColor="@color/input_box_stroke"
+            app:boxStrokeWidth="1.5dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:hintTextColor="@color/input_hint_color"
+            app:errorTextColor="@color/brand_red"
+            app:boxStrokeErrorColor="@color/brand_red">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailEditText"
@@ -66,7 +73,9 @@
                 android:autofillHints="emailAddress"
                 android:inputType="textEmailAddress"
                 android:maxLength="150"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,7 +86,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="Contraseña"
-            app:endIconMode="password_toggle">
+            android:textColorHint="@color/text_secondary"
+            app:boxStrokeColor="@color/input_box_stroke"
+            app:boxStrokeWidth="1.5dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:hintTextColor="@color/input_hint_color"
+            app:errorTextColor="@color/brand_red"
+            app:boxStrokeErrorColor="@color/brand_red"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/input_icon_tint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordEditText"
@@ -85,7 +102,9 @@
                 android:layout_height="wrap_content"
                 android:autofillHints="password"
                 android:inputType="textPassword"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +115,7 @@
             android:layout_marginTop="16dp"
             android:background="#FFEBEE"
             android:padding="12dp"
-            android:textColor="#A90012"
+            android:textColor="@color/brand_red_dark"
             android:textSize="14sp"
             android:textStyle="bold"
             android:visibility="gone" />
@@ -106,7 +125,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
-            android:indeterminateTint="#D90016"
+            android:indeterminateTint="@color/brand_red"
             android:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
@@ -114,10 +133,10 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="20dp"
-            android:backgroundTint="#D90016"
+            android:backgroundTint="@color/brand_red"
             android:text="Ingresar"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -127,7 +146,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Acceso exclusivo para usuarios autorizados de Continental."
-            android:textColor="#667085"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp" />
 
     </LinearLayout>
