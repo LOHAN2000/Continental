@@ -121,6 +121,7 @@ export function ProviderManager() {
   }
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void loadProviders();
   }, []);
 
