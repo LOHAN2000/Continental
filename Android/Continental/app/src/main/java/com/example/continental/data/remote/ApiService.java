@@ -5,6 +5,7 @@ import com.example.continental.data.model.InventorySummaryResponse;
 import com.example.continental.data.model.KardexResponse;
 import com.example.continental.data.model.LoginRequest;
 import com.example.continental.data.model.LoginResponse;
+import com.example.continental.data.model.ProductResponse;
 import com.example.continental.data.model.ProductsResponse;
 
 import retrofit2.Call;
@@ -26,6 +27,11 @@ public interface ApiService {
             @Query("search") String search,
             @Query("idCategoria") Long idCategoria,
             @Query("includeInactive") boolean includeInactive
+    );
+
+    @GET("api/productos/codigo/{codigoBarras}")
+    Call<ProductResponse> getProductByBarcode(
+            @Path("codigoBarras") String codigoBarras
     );
 
     @GET("api/inventario")

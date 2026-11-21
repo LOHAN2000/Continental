@@ -116,6 +116,21 @@ export async function POST(
     const body =
       (await request.json()) as ProductFormData;
 
+    const payload = {
+      idCategoria: Number(body.idCategoria),
+      codigoBarras: body.codigoBarras?.trim() ?? "",
+      nombre: body.nombre?.trim() ?? "",
+      descripcion: body.descripcion?.trim() || null,
+      precioCompra: Number(body.precioCompra),
+      precioVenta: Number(body.precioVenta),
+      stockMinimo: Number(body.stockMinimo),
+      controlaVencimiento: Boolean(
+        body.controlaVencimiento
+      ),
+    };
+
+    console.log("Registrando producto:", payload);
+
     const response = await fetch(
       `${API_URL}/api/productos`,
       {
@@ -126,38 +141,41 @@ export async function POST(
           "Content-Type":
             "application/json",
         },
-        body: JSON.stringify({
-          idCategoria:
-            Number(body.idCategoria),
-
-          codigoBarras:
-            body.codigoBarras.trim(),
-
-          nombre:
-            body.nombre.trim(),
-
-          descripcion:
-            body.descripcion?.trim() ||
-            null,
-
-          precioCompra:
-            Number(body.precioCompra),
-
-          precioVenta:
-            Number(body.precioVenta),
-
-          stockMinimo:
-            Number(body.stockMinimo),
-
-          controlaVencimiento:
-            body.controlaVencimiento,
-        }),
-      cache: "no-store",
+        body: JSON.stringify(payload),
+        cache: "no-store",
       }
     );
 
-    const responseBody =
-      await response.json();
+    const responseText = await response.text();
+
+    let responseBody: unknown;
+
+    try {
+      responseBody = responseText
+        ? JSON.parse(responseText)
+        : {
+            message: response.ok
+              ? "Producto procesado correctamente."
+              : "El backend no devolvió detalles del error.",
+          };
+    } catch {
+      responseBody = {
+        message: response.ok
+          ? "Producto procesado correctamente."
+          : responseText ||
+            "El backend devolvió una respuesta no válida.",
+      };
+    }
+
+    if (!response.ok) {
+      console.error(
+        "Error del backend al registrar producto:",
+        {
+          status: response.status,
+          body: responseBody,
+        }
+      );
+    }
 
     return NextResponse.json(
       responseBody,
@@ -165,11 +183,17 @@ export async function POST(
         status: response.status,
       }
     );
-  } catch {
+  } catch (error) {
+    console.error(
+      "Excepción en POST /api/products:",
+      error
+    );
+
     return NextResponse.json(
       {
-        message:
-          "No fue posible procesar el producto.",
+        message: error instanceof Error
+          ? error.message
+          : "No fue posible procesar el producto.",
       },
       {
         status: 500,

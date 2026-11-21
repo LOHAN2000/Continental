@@ -54,6 +54,14 @@ dependencies {
     implementation("androidx.fragment:fragment:1.8.5")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    val cameraXVersion = "1.5.3"
+    implementation("androidx.camera:camera-core:$cameraXVersion")
+    implementation("androidx.camera:camera-camera2:$cameraXVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraXVersion")
+    implementation("androidx.camera:camera-view:$cameraXVersion")
+
+    implementation("com.google.mlkit:barcode-scanning:17.3.0")
+
     implementation("com.google.android.material:material:1.12.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
