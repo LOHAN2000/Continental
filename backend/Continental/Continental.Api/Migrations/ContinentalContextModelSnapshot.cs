@@ -73,11 +73,17 @@ namespace Continental.Api.Migrations
 
                     b.HasIndex("IdLote");
 
-                    b.HasIndex("IdProducto");
-
                     b.HasIndex("Tipo");
 
                     b.HasIndex("Activa", "Leida");
+
+                    b.HasIndex("IdProducto", "Tipo")
+                        .IsUnique()
+                        .HasFilter("\"activa\" = TRUE AND \"id_lote\" IS NULL");
+
+                    b.HasIndex("IdProducto", "IdLote", "Tipo")
+                        .IsUnique()
+                        .HasFilter("\"activa\" = TRUE AND \"id_lote\" IS NOT NULL");
 
                     b.ToTable("alertas");
                 });

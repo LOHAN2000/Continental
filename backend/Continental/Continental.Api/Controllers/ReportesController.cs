@@ -1,4 +1,3 @@
-using Continental.Api.Services.Alertas;
 using Continental.Api.Services.Reportes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,16 +12,11 @@ public class ReportesController : ControllerBase
     private readonly IReporteService
         _reporteService;
 
-    private readonly IAlertaService
-        _alertaService;
-
     public ReportesController(
-        IReporteService reporteService,
-        IAlertaService alertaService
+        IReporteService reporteService
     )
     {
         _reporteService = reporteService;
-        _alertaService = alertaService;
     }
 
     [HttpGet("dashboard")]
@@ -42,8 +36,6 @@ public class ReportesController : ControllerBase
                     "posterior a la fecha final."
             });
         }
-
-        await _alertaService.GenerateAsync();
 
         var dashboard = await _reporteService
             .GetDashboardAsync(

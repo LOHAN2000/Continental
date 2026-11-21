@@ -441,6 +441,27 @@ public class ContinentalContext : DbContext
                 alerta.Activa,
                 alerta.Leida
             });
+
+            entity.HasIndex(alerta => new
+            {
+                alerta.IdProducto,
+                alerta.Tipo
+            })
+                .IsUnique()
+                .HasFilter(
+                    "\"activa\" = TRUE AND \"id_lote\" IS NULL"
+                );
+
+            entity.HasIndex(alerta => new
+            {
+                alerta.IdProducto,
+                alerta.IdLote,
+                alerta.Tipo
+            })
+                .IsUnique()
+                .HasFilter(
+                    "\"activa\" = TRUE AND \"id_lote\" IS NOT NULL"
+                );
         });
     }
 

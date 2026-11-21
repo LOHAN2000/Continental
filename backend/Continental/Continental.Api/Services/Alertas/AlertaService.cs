@@ -24,11 +24,20 @@ public class AlertaService : IAlertaService
 
     public async Task GenerateAsync()
     {
+        await using var transaction =
+            await _context.Database
+                .BeginTransactionAsync();
+
+        await _context.Database.ExecuteSqlRawAsync(
+            "SELECT pg_advisory_xact_lock(847263159)"
+        );
+
         await GenerateStockAlertsAsync();
         await GenerateExpirationAlertsAsync();
         await CloseResolvedAlertsAsync();
 
         await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
     }
 
     public async Task<IReadOnlyCollection<AlertaResponseDto>>

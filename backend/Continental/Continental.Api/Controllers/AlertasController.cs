@@ -25,8 +25,6 @@ public class AlertasController : ControllerBase
         [FromQuery] bool includeInactive = false
     )
     {
-        await _alertaService.GenerateAsync();
-
         var alerts = await _alertaService
             .GetAllAsync(
                 tipo,
@@ -43,8 +41,6 @@ public class AlertasController : ControllerBase
     [HttpGet("resumen")]
     public async Task<IActionResult> GetSummary()
     {
-        await _alertaService.GenerateAsync();
-
         var summary = await _alertaService
             .GetSummaryAsync();
 
