@@ -30,6 +30,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(
+                androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+        );
         super.onCreate(savedInstanceState);
 
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
