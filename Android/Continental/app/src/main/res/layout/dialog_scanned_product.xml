@@ -128,4 +128,15 @@
         android:textSize="13sp"
         android:textStyle="bold" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addScannedProductButton"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="22dp"
+        android:backgroundTint="@color/brand_red"
+        android:text="Agregar al carrito"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+
 </LinearLayout>

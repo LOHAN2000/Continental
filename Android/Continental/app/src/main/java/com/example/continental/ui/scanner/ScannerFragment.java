@@ -283,16 +283,41 @@ public class ScannerFragment extends Fragment {
 
         configureStatusBadge(statusTextView, product.getEstadoStock());
 
-        AlertDialog dialog = new MaterialAlertDialogBuilder(
+        MaterialButton addButton = dialogView.findViewById(R.id.addScannedProductButton);
+        addButton.setEnabled(product.isActivo() && product.getStockActual() > 0);
+
+        AlertDialog productDialog = new MaterialAlertDialogBuilder(
                 requireContext(),
                 R.style.ThemeOverlay_App_MaterialAlertDialog
         )
                 .setView(dialogView)
-                .setPositiveButton("Cerrar", null)
+                .setNegativeButton("Cerrar", null)
                 .create();
 
-        dialog.setOnShowListener(d -> {
-            Button closeButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        addButton.setOnClickListener(view -> {
+            String error = com.example.continental.data.local.CartManager.getInstance()
+                    .addProduct(product);
+
+            if (error != null) {
+                android.widget.Toast.makeText(
+                        requireContext(),
+                        error,
+                        android.widget.Toast.LENGTH_LONG
+                ).show();
+                return;
+            }
+
+            android.widget.Toast.makeText(
+                    requireContext(),
+                    product.getNombre() + " agregado al carrito.",
+                    android.widget.Toast.LENGTH_SHORT
+            ).show();
+
+            productDialog.dismiss();
+        });
+
+        productDialog.setOnShowListener(d -> {
+            Button closeButton = productDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
             if (closeButton != null) {
                 closeButton.setTextColor(
                         ContextCompat.getColor(requireContext(), R.color.brand_red)
@@ -301,13 +326,13 @@ public class ScannerFragment extends Fragment {
             }
         });
 
-        dialog.setOnDismissListener(d -> showScanAgainButton());
+        productDialog.setOnDismissListener(d -> showScanAgainButton());
 
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (productDialog.getWindow() != null) {
+            productDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         }
 
-        dialog.show();
+        productDialog.show();
     }
 
     private void configureStatusBadge(TextView badgeView, String status) {

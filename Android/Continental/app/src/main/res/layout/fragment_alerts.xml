@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F7F8FA"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Alertas"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/alertsSummaryTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:hint="Buscar alerta"
+        android:textColorHint="@color/text_primary"
+        app:boxStrokeColor="@color/input_box_stroke"
+        app:boxStrokeWidth="1.5dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:hintTextColor="@color/input_hint_color"
+        app:startIconDrawable="@android:drawable/ic_menu_search"
+        app:startIconTint="@color/text_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/alertSearchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_primary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/alertFilterToggleGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/allAlertsButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="Todas"
+            android:textAllCaps="false"
+            android:textColor="@color/toggle_button_text_selector"
+            android:textStyle="bold"
+            app:backgroundTint="@color/toggle_button_bg_selector"
+            app:strokeColor="@color/brand_red"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/unreadAlertsButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pendientes"
+            android:textAllCaps="false"
+            android:textColor="@color/toggle_button_text_selector"
+            android:textStyle="bold"
+            app:backgroundTint="@color/toggle_button_bg_selector"
+            app:strokeColor="@color/brand_red"
+            app:strokeWidth="1.5dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/readAlertsButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Leídas"
+            android:textAllCaps="false"
+            android:textColor="@color/toggle_button_text_selector"
+            android:textStyle="bold"
+            app:backgroundTint="@color/toggle_button_bg_selector"
+            app:strokeColor="@color/brand_red"
+            app:strokeWidth="1.5dp" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/alertsSwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/alertsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/alertsProgressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/brand_red"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/alertsMessageTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="24dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</LinearLayout>
