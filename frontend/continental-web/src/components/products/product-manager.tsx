@@ -454,7 +454,7 @@ export function ProductManager({
 
   return (
     <section className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.15em] text-[#d90016]">
             Continental
@@ -771,12 +771,12 @@ export function ProductManager({
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 px-5 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <div className="border-b border-slate-200 px-4 py-4 sm:px-5 lg:py-3">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
               <label
                 htmlFor="search"
-                className="text-sm font-semibold text-slate-800"
+                className="shrink-0 text-sm font-semibold text-slate-800"
               >
                 Buscar
               </label>
@@ -789,7 +789,7 @@ export function ProductManager({
                   setSearch(event.target.value)
                 }
                 placeholder="Nombre, código o categoría..."
-                className="w-72 rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#d90016] focus:ring-4 focus:ring-red-100"
+                className="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#d90016] focus:ring-4 focus:ring-red-100 sm:w-72"
               />
             </div>
 
@@ -798,7 +798,7 @@ export function ProductManager({
               onChange={(event) =>
                 setIdCategoriaFilter(Number(event.target.value))
               }
-              className="w-48 rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none transition focus:border-[#d90016] focus:ring-4 focus:ring-red-100"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none transition focus:border-[#d90016] focus:ring-4 focus:ring-red-100 lg:w-48"
             >
               <option value={0}>Todas las categorías</option>
               {categories.map((cat) => (
@@ -811,7 +811,7 @@ export function ProductManager({
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left">
+          <table className="w-full min-w-[900px] text-left">
             <thead>
               <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
                 <th className="py-2.5 px-5 font-bold">

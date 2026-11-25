@@ -867,7 +867,7 @@ export function PurchaseManager() {
               Consulta compras registradas y sus detalles.
             </p>
           </div>
-          <label className="flex items-center gap-3 text-sm font-semibold text-slate-800">
+          <label className="flex flex-col gap-2 text-sm font-semibold text-slate-800 sm:flex-row sm:items-center sm:gap-3">
             Buscar
             <input
               type="search"
@@ -876,7 +876,7 @@ export function PurchaseManager() {
                 setSearch(event.target.value)
               }
               placeholder="Proveedor, usuario o número..."
-              className="w-72 max-w-full rounded-xl border border-slate-300 bg-white px-4 py-2 font-normal text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#d90016] focus:ring-4 focus:ring-red-100"
+              className="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-2 font-normal text-slate-900 outline-none placeholder:text-slate-400 focus:border-[#d90016] focus:ring-4 focus:ring-red-100 sm:w-72"
             />
           </label>
         </div>

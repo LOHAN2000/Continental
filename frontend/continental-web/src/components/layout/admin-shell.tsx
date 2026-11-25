@@ -19,20 +19,20 @@ export function AdminShell({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#f7f8fa]">
+    <div className="min-h-screen w-full min-w-0 overflow-x-clip bg-[#f7f8fa]">
       <Sidebar
         user={user}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="min-h-screen lg:pl-[280px]">
+      <div className="min-h-screen w-full min-w-0 lg:pl-[280px]">
         <Topbar
           user={user}
           onOpenMenu={() => setIsSidebarOpen(true)}
         />
 
-        <main className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main className="min-w-0 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           {children}
         </main>
       </div>

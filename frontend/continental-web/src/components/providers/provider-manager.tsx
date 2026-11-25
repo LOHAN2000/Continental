@@ -325,7 +325,7 @@ export function ProviderManager() {
 
   return (
     <section className="space-y-6">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.15em] text-[#d90016]">
             Continental
@@ -554,12 +554,12 @@ export function ProviderManager() {
       </div>
 
       <div className="rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-200 px-5 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <div className="border-b border-slate-200 px-4 py-4 sm:px-5">
+          <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
               <label
                 htmlFor="search"
-                className="text-sm font-semibold text-slate-800"
+                className="shrink-0 text-sm font-semibold text-slate-800"
               >
                 Buscar
               </label>
@@ -572,7 +572,7 @@ export function ProviderManager() {
                   setSearch(event.target.value)
                 }
                 placeholder="Razón social o documento..."
-                className="w-72 rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#d90016] focus:ring-4 focus:ring-red-100"
+                className="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#d90016] focus:ring-4 focus:ring-red-100 sm:w-72"
               />
             </div>
           </div>

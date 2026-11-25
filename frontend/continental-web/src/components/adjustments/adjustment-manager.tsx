@@ -498,7 +498,7 @@ export function AdjustmentManager() {
             label="Filtrar por producto"
             htmlFor="adjustment-filter-product"
           >
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 sm:flex-row">
               <select
                 id="adjustment-filter-product"
                 value={filterProductId}
@@ -507,7 +507,7 @@ export function AdjustmentManager() {
                     Number(event.target.value)
                   )
                 }
-                className="w-64 max-w-full rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-[#d90016] focus:ring-4 focus:ring-red-100"
+                className="w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-2 text-slate-900 outline-none focus:border-[#d90016] focus:ring-4 focus:ring-red-100 sm:w-64"
               >
                 <option value={0}>Todos los productos</option>
                 {products.map((product) => (
@@ -525,7 +525,7 @@ export function AdjustmentManager() {
                   void loadAdjustments(filterProductId)
                 }
                 disabled={isLoadingAdjustments}
-                className="h-10 rounded-xl bg-slate-800 px-4 font-bold text-white transition hover:bg-slate-700 disabled:opacity-60"
+                className="h-10 rounded-xl bg-slate-800 px-4 font-bold text-white transition hover:bg-slate-700 disabled:opacity-60 sm:shrink-0"
               >
                 Filtrar
               </button>
